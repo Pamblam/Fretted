@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>guitar fretboard</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+	<body>
+		<script src="gfret.js"></script>
+		<script>
+			// Example making Open C Chord Chart
+			// Make a helper function  for this....
+			var fretboard = new GFret('V');
+			fretboard.markNote('C', 4, 5);
+			fretboard.markNote('E', 3, 4);
+			fretboard.markNote('C', 2, 2);
+			fretboard.muteString(6);
+			fretboard.openString(3, "G");
+			fretboard.openString(1, "E");
+			fretboard.getDataURI(1, 4).then(uri=>{
+				var img = new Image();
+				img.onload=()=>{
+					img.setAttribute("style", "border: 1px solid black;");
+					document.body.innerHTML = "<h3>Open C Chord</h3>";
+					document.body.appendChild(img);
+				}
+				img.src=uri;
+			});
+		</script>
+	</body>
+</html>
