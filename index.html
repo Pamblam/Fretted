@@ -8,24 +8,64 @@
 	<body>
 		<script src="gfret.js"></script>
 		<script>
-			// Example making Open C Chord Chart
-			// Make a helper function  for this....
-			var fretboard = new GFret('V');
-			fretboard.markNote('C', 4, 5);
-			fretboard.markNote('E', 3, 4);
-			fretboard.markNote('C', 2, 2);
-			fretboard.muteString(6);
-			fretboard.openString(3, "G");
-			fretboard.openString(1, "E");
-			fretboard.getDataURI(1, 4).then(uri=>{
-				var img = new Image();
-				img.onload=()=>{
-					img.setAttribute("style", "border: 1px solid black;");
-					document.body.innerHTML = "<h3>Open C Chord</h3>";
-					document.body.appendChild(img);
-				}
-				img.src=uri;
+			
+			// Dm7/E Guitar Chord Chart
+			Fretboard.Guitar().makeChord([
+				new Fretboard.String().setFret(5).setNote("A"),
+				new Fretboard.String().setFret(6).setNote("F"),
+				new Fretboard.String().setFret(5).setNote("C"),
+				new Fretboard.String().setFret(7).setNote("A"),
+				new Fretboard.String().setFret(7).setNote("B"),
+				new Fretboard.String().setNote("E"),
+			]).render(Fretboard.IMAGE).then(img=>{
+				document.body.innerHTML += "<h3>Vertical Labelled Dm7/E Guitar Chord Chart</h3>";
+				document.body.appendChild(img);
 			});
+			
+			// Horizontal Open C Guitar Chord Chart
+			Fretboard.Guitar().orientation(Fretboard.HORIZONTAL).makeChord([
+				new Fretboard.String(),
+				new Fretboard.String().setFret(2),
+				new Fretboard.String(),
+				new Fretboard.String().setFret(3),
+				new Fretboard.String().setFret(4),
+				new Fretboard.String().mute(),
+			]).render(Fretboard.IMAGE).then(img=>{
+				document.body.innerHTML += "<h3>Horizontal Unlabelled Open C Guitar Chord Chart</h3>";
+				document.body.appendChild(img);
+			});
+			
+			// B Ukulele Chord Chart W/ Highlighted root notes
+			var blue = "#4286f4", yellow = "#ffe95b", green = "#5bffb7";
+			Fretboard.Ukulele().orientation(Fretboard.HORIZONTAL).makeChord([
+				new Fretboard.String().setFret(2).setNote("B").setBGColor(blue).setTextColor(yellow),
+				new Fretboard.String().setFret(2).setNote("G").setBGColor(green),
+				new Fretboard.String().setFret(3).setNote("D#").setBGColor(green),
+				new Fretboard.String().setFret(4).setNote("B").setBGColor(blue).setTextColor(yellow),
+			]).render(Fretboard.IMAGE).then(img=>{
+				document.body.innerHTML += "<h3>B Ukulele Chord Chart W/ Highlighted root notes</h3>";
+				document.body.appendChild(img);
+			});
+
+			// C Major Scale for Guitar
+			Fretboard.Guitar()
+				// 1st String
+				.markNote("F", 1, 1).markNote("G", 3, 1).markNote("A", 5, 1).markNote("B", 7, 1).markNote("C", 8, 1, green, yellow).markNote("D", 10, 1).markNote("E", 12, 1)
+				.markNote("F", 1+12, 1).markNote("G", 3+12, 1).markNote("A", 5+12, 1).markNote("B", 7+12, 1).markNote("C", 8+12, 1, green, yellow).markNote("D", 10+12, 1).markNote("E", 12+12, 1)
+				// 2nd String
+				
+				// 3rd String
+				
+				// 4th String
+				
+				// 5th String
+				
+				// 6th String
+				
+				.render(Fretboard.IMAGE).then(img=>{
+					document.body.innerHTML += "<h3>Incomplete Guitar Scale (C Maj)</h3>";
+					document.body.appendChild(img);
+				});
 		</script>
 	</body>
 </html>
