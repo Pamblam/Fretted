@@ -7,8 +7,8 @@ const Fretboard = (function(){
 			this.orientation=options.orientation || 'H';
 			this.frets=options.frets || 24;
 			this.strings=options.strings || 6;
-			this.singleFretMarkers = options.singleFretMarkers && options.singleFretMarkers.length || [3,5,7,9,15,17,19,21];
-			this.doubleFretMarkers = options.doubleFretMarkers && options.doubleFretMarkers.length || [12,24];
+			this.singleFretMarkers = options.singleFretMarkers && options.singleFretMarkers.length ? options.singleFretMarkers : [3,5,7,9,15,17,19,21];
+			this.doubleFretMarkers = options.doubleFretMarkers && options.doubleFretMarkers.length ? options.doubleFretMarkers : [12,24];
 			this.canvas = document.createElement("canvas");
 			this.canvasWidth = ((this.frets*40)+35);
 			this.canvasHeight = (this.strings*30);
@@ -215,8 +215,61 @@ const Fretboard = (function(){
 		setTextColor(color){this.textColor=color; return this;}
 	}
 	
+	class Scale{
+		constructor(){
+			this.noteColor="#FF0000";
+			this.noteTextColor="#000000";
+			this.rootNoteColor="#FF0000";
+			this.rootTextColor="#000000";
+			this.root="C";
+			this.notes=['C','D','E','F','G','A','B'];
+		}
+		setNotes(notes){
+			var n=[], nn;
+			for(var i=0; i<notes.length; i++){
+				nn = Scale.normalizeNote(notes[i]);
+				if(!nn) throw new Error("Invlid note in scale.");
+				n.push(nn);
+			}
+			this.notes=n;
+			return this;
+		}
+		setRootNote(note){
+			note = Scale.normalizeNote(note);
+			if(!note) throw new Error("Invlid root note.");
+			this.root=note;
+			return this;
+		}
+		setNoteStyle(bgColor="#FF0000", textColor="#000000"){
+			this.noteColor=bgColor;
+			this.noteTextColor=textColor;
+			return this;
+		}
+		setRootNoteStyle(bgColor="#FF0000", textColor="#000000"){
+			this.rootNoteColor=bgColor;
+			this.rootTextColor=textColor;
+			return this;
+		}
+	}
+	Scale.noteMap = ['C','C#/Db','D','D#/Eb','E','F','F#/Gb','G','G#/Ab','A','A#/Bb','B'];
+	Scale.normalizeNote = function(note){
+		for(var i=0; i<Scale.noteMap.length; i++) if(note.toUpperCase() == Scale.noteMap[i]) return Scale.noteMap[i];
+		for(var i=0; i<Scale.noteMap.length; i++) if(~Scale.noteMap[i].toUpperCase().indexOf(note.toUpperCase())) return Scale.noteMap[i].split("/")[0];
+		return false;
+	};
+	Scale.getNextNote = function(note){
+		var idx=false;
+		for(var i=0; i<Scale.noteMap.length; i++) if(note.toUpperCase() == Scale.noteMap[i]){ idx=i; break; }
+		if(false===idx) for(var i=0; i<Scale.noteMap.length; i++) if(~Scale.noteMap[i].toUpperCase().indexOf(note.toUpperCase())){ idx=i; break; }
+		if(false===idx) return false;
+		idx++;
+		if(idx==Scale.noteMap.length) idx=0;
+		return Scale.normalizeNote(Scale.noteMap[idx]);
+	};
+	
 	class FB_WRAPPER{
 		constructor(opts){
+			this.tuning=opts.tuning;
 			this._orientation=undefined;
 			this.range=undefined;
 			this.fretboard = new FB(opts);
@@ -226,8 +279,19 @@ const Fretboard = (function(){
 			this.fretboard.orientation = o;
 			return this;
 		}
-		markNote(note, fret, string, circleColor="#FF0000", textColor="#000000"){
-			this.fretboard.markNote(note, fret, string, circleColor, textColor);
+		makeScale(scale){ // openString(string, symbol="O")
+			var note, string, fret;
+			for(string=1; string<=this.tuning.length; string++){
+				if(!note) note=Scale.normalizeNote(this.tuning[string-1]);
+				if(note === scale.root || ~scale.notes.indexOf(note)) this.fretboard.openString(string, note);
+				for(fret=1; fret<=this.fretboard.frets; fret++){
+					var n=note;
+					note=Scale.getNextNote(note);
+					if(note === scale.root) this.fretboard.markNote(note, fret, string, scale.rootNoteColor, scale.rootTextColor);
+					else if(~scale.notes.indexOf(note)) this.fretboard.markNote(note, fret, string, scale.noteColor, scale.textColor);
+				}
+				note=false;
+			}
 			return this;
 		}
 		makeChord(strings){
@@ -279,22 +343,46 @@ const Fretboard = (function(){
 	FB_WRAPPER.String = String;
 	FB_WRAPPER.VERTICAL='V';
 	FB_WRAPPER.HORIZONTAL='H';
-	FB_WRAPPER.Guitar = function(){
-		return new FB_WRAPPER({
-			frets: 24,
-			strings: 6,
-			doubleFretMarkers: [12,24],
-			singleFretMarkers: [3,5,7,9,15,17,19,21]
+	FB_WRAPPER.Scale = Scale;
+	FB_WRAPPER.makeInstrument=function(opts){
+		['name','frets','strings','tuning'].forEach(opt=>{
+			if(!opts[opt]) throw new Error("Instrument must have "+opt+" property.");
 		});
+		opts.frets=parseInt(opts.frets);
+		if(!opts.frets) throw new Error("Instrument frets property must be greater than zero.");
+		opts.strings=parseInt(opts.strings);
+		if(!opts.strings) throw new Error("Instrument strings property must be greater than zero.");
+		if(!Array.isArray(opts.tuning)||opts.tuning.length!=opts.strings) throw new Error("Tuning must be an array containing one element for each string.");
+		var o=[], note; 
+		for(var i=0; i<opts.tuning.length; i++){
+			note = Scale.normalizeNote(opts.tuning[i]);
+			if(!note) throw new Error("Invalid note in tuning array.");
+			o.push(note);
+		}
+		opts.tuning = o;
+		if(typeof opts.name != "string") throw new Error("Instrument name must be a string.");
+		if(!opts.doubleFretMarkers||!Array.isArray(opts.doubleFretMarkers)) opts.doubleFretMarkers = [];
+		if(!opts.singleFretMarkers||!Array.isArray(opts.singleFretMarkers)) opts.singleFretMarkers = [];
+		FB_WRAPPER[opts.name]=function(){
+			return new FB_WRAPPER(opts);
+		};
 	};
-	FB_WRAPPER.Ukulele = function(){
-		return new FB_WRAPPER({
-			frets: 18,
-			strings: 4,
-			doubleFretMarkers: [12],
-			singleFretMarkers: [5,7,10,14]
-		});
-	};
+	FB_WRAPPER.makeInstrument({
+		name: 'Guitar',
+		frets: 24,
+		strings: 6,
+		doubleFretMarkers: [12,24],
+		singleFretMarkers: [3,5,7,9,15,17,19,21],
+		tuning: ["E","B","G","D","A","E"]
+	});
+	FB_WRAPPER.makeInstrument({
+		name: 'Ukulele',
+		frets: 18,
+		strings: 4,
+		doubleFretMarkers: [12],
+		singleFretMarkers: [5,7,10,14],
+		tuning: ["A","E","C","G"]
+	});
 	
 	return FB_WRAPPER;
 })();
