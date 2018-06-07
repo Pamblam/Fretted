@@ -1,15 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
-		<title>guitar fretboard</title>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>Fretted.js</title>
+		
+
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shCore.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shThemeDefault.css">
+		<!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
 	</head>
 	<body>
-			<h1>fretted.js demo</h1>
-			
-			<h3>Vertical Labelled Dm7/E Guitar Chord Chart</h3>
-			<code><pre>// Dm7/E Guitar Chord Chart
+		<nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="#">Fretted.js</a>
+				</div>
+			</div>
+		</nav>
+
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h1>fretted.js demo</h1>
+
+					<h3>Vertical Labelled Dm7/E Guitar Chord Chart</h3>
+					<pre class="brush: js">// Dm7/E Guitar Chord Chart
 Fretboard.Guitar().makeChord([
 	new Fretboard.String().setFret(5).setNote("A"),
 	new Fretboard.String().setFret(6).setNote("F"),
@@ -19,12 +41,12 @@ Fretboard.Guitar().makeChord([
 	new Fretboard.String().setNote("E"),
 ]).render(Fretboard.IMAGE).then(img=>{
 	document.getElementById("chordchart1").appendChild(img);
-});</pre></code>
-			<button onclick="chordchart1()">Run</button>
-			<div id="chordchart1"></div>
-		
-			<h3>Horizontal Open C Guitar Chord Chart</h3>
-			<code><pre>// Horizontal Open C Guitar Chord Chart
+});</pre>
+					<button class='btn btn-primary' onclick="chordchart1()"><span class='glyphicon glyphicon-play'></span> Run</button>
+					<hr>
+
+					<h3>Horizontal Open C Guitar Chord Chart</h3>
+					<pre class="brush: js">// Horizontal Open C Guitar Chord Chart
 Fretboard.Guitar().orientation(Fretboard.HORIZONTAL).makeChord([
 	new Fretboard.String(),
 	new Fretboard.String().setFret(2),
@@ -34,12 +56,12 @@ Fretboard.Guitar().orientation(Fretboard.HORIZONTAL).makeChord([
 	new Fretboard.String().mute(),
 ]).render(Fretboard.IMAGE).then(img=>{
 	document.getElementById("chordchart2").appendChild(img);
-});</pre></code>
-			<button onclick="chordchart2()">Run</button>
-			<div id="chordchart2"></div>
-			
-			<h3>B Ukulele Chord Chart W/ Highlighted root notes</h3>
-			<code><pre>// B Ukulele Chord Chart W/ Highlighted root notes
+});</pre>
+					<button class='btn btn-primary' onclick="chordchart2()"><span class='glyphicon glyphicon-play'></span> Run</button>
+					<hr>
+
+					<h3>B Ukulele Chord Chart W/ Highlighted root notes</h3>
+					<pre class="brush: js">// B Ukulele Chord Chart W/ Highlighted root notes
 var blue = "#4286f4", yellow = "#ffe95b", green = "#5bffb7";
 Fretboard.Ukulele().makeChord([
 	new Fretboard.String().setFret(2).setNote("B").setBGColor(blue).setTextColor(yellow),
@@ -48,22 +70,22 @@ Fretboard.Ukulele().makeChord([
 	new Fretboard.String().setFret(4).setNote("B").setBGColor(blue).setTextColor(yellow),
 ]).render(Fretboard.IMAGE).then(img=>{
 	document.getElementById("chordchart3").appendChild(img);
-});</pre></code>
-			<button onclick="chordchart3()">Run</button>
-			<div id="chordchart3"></div>
-			
-			<h3>Guitar Scale (C Maj)</h3>
-			<code><pre>// Guitar Scale (C Maj)
+});</pre>
+					<button class='btn btn-primary' onclick="chordchart3()"><span class='glyphicon glyphicon-play'></span> Run</button>
+					<hr>
+
+					<h3>Guitar Scale (C Maj)</h3>
+					<pre class="brush: js">// Guitar Scale (C Maj)
 var blue = "#4286f4", yellow = "#ffe95b", green = "#5bffb7";
 var c_maj_scale = new Fretboard.Scale().setNotes(['C','D','E','F','G','A','B']).setRootNote("C").setNoteStyle(green).setRootNoteStyle(blue, yellow);
 Fretboard.Guitar().makeScale(c_maj_scale).render(Fretboard.IMAGE).then(img=>{
 	document.getElementById("scale1").appendChild(img);
-});</pre></code>
-			<button onclick="scale1()">Run</button>
-			<div id="scale1"></div>
-			
-			<h3>Vertical C Maj Scale on Mandolin</h3>
-			<code><pre>// Vertical C Maj Scale on Mandolin
+});</pre>
+					<button class='btn btn-primary' onclick="scale1()"><span class='glyphicon glyphicon-play'></span> Run</button>
+					<hr>
+
+					<h3>Vertical C Maj Scale on Mandolin</h3>
+					<pre class="brush: js">// Vertical C Maj Scale on Mandolin
 Fretboard.makeInstrument({
 	name: 'Mandolin',
 	frets: 20,
@@ -76,13 +98,21 @@ var blue = "#4286f4", yellow = "#ffe95b", green = "#5bffb7";
 var c_maj_scale = new Fretboard.Scale().setNotes(['C','D','E','F','G','A','B']).setRootNote("C").setNoteStyle(green).setRootNoteStyle(blue, yellow);
 Fretboard.Mandolin().orientation(Fretboard.VERTICAL).makeScale(c_maj_scale).render(Fretboard.IMAGE).then(img=>{
 	document.getElementById("scale2").appendChild(img);
-});	</pre></code>
-			<button onclick="scale2()">Run</button>
-			<div id="scale2"></div>
-			
+});	</pre>
+					<button class='btn btn-primary' onclick="scale2()"><span class='glyphicon glyphicon-play'></span> Run</button>
+					<BR><br><br><br>
+
+				</div>
+			</div>
+		</div>
+		
 		<script src="fretted.js"></script>
+		<script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shCore.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shBrushJScript.min.js"></script>
+		<script>SyntaxHighlighter.all()</script>
 		<script>
-	
 			// Dm7/E Guitar Chord Chart
 			function chordchart1(){
 				Fretboard.Guitar().makeChord([
@@ -93,7 +123,7 @@ Fretboard.Mandolin().orientation(Fretboard.VERTICAL).makeScale(c_maj_scale).rend
 					new Fretboard.String().setFret(7).setNote("B"),
 					new Fretboard.String().setNote("E"),
 				]).render(Fretboard.IMAGE).then(img=>{
-					document.getElementById("chordchart1").appendChild(img);
+					modal('Dm7/E Guitar Chord Chart', img);
 				});
 			}
 
@@ -107,7 +137,7 @@ Fretboard.Mandolin().orientation(Fretboard.VERTICAL).makeScale(c_maj_scale).rend
 					new Fretboard.String().setFret(4),
 					new Fretboard.String().mute(),
 				]).render(Fretboard.IMAGE).then(img=>{
-					document.getElementById("chordchart2").appendChild(img);
+					modal('Horizontal Open C Guitar Chord Chart', img);
 				});
 			}
 			
@@ -120,7 +150,7 @@ Fretboard.Mandolin().orientation(Fretboard.VERTICAL).makeScale(c_maj_scale).rend
 					new Fretboard.String().setFret(3).setNote("D#").setBGColor(green),
 					new Fretboard.String().setFret(4).setNote("B").setBGColor(blue).setTextColor(yellow),
 				]).render(Fretboard.IMAGE).then(img=>{
-					document.getElementById("chordchart3").appendChild(img);
+					modal('B Ukulele Chord Chart W/ Highlighted root notes', img);
 				});
 			}
 			
@@ -129,7 +159,7 @@ Fretboard.Mandolin().orientation(Fretboard.VERTICAL).makeScale(c_maj_scale).rend
 				var blue = "#4286f4", yellow = "#ffe95b", green = "#5bffb7";
 				var c_maj_scale = new Fretboard.Scale().setNotes(['C','D','E','F','G','A','B']).setRootNote("C").setNoteStyle(green).setRootNoteStyle(blue, yellow);
 				Fretboard.Guitar().makeScale(c_maj_scale).render(Fretboard.IMAGE).then(img=>{
-					document.getElementById("scale1").appendChild(img);
+					modal('Guitar Scale (C Maj)', img);
 				});
 			}
 	
@@ -146,10 +176,21 @@ Fretboard.Mandolin().orientation(Fretboard.VERTICAL).makeScale(c_maj_scale).rend
 				var blue = "#4286f4", yellow = "#ffe95b", green = "#5bffb7";
 				var c_maj_scale = new Fretboard.Scale().setNotes(['C','D','E','F','G','A','B']).setRootNote("C").setNoteStyle(green).setRootNoteStyle(blue, yellow);
 				Fretboard.Mandolin().orientation(Fretboard.VERTICAL).makeScale(c_maj_scale).render(Fretboard.IMAGE).then(img=>{
-					document.getElementById("scale2").appendChild(img);
+					modal('Vertical C Maj Scale on Mandolin', img);
 				});	
-			}	
-
+			}
+			
+			function modal(title='', img){
+				var w = $("<div style='height:100vh;width:100vw;position:fixed;top:0;left:0;background-color:rgba(255,255,255,0.8);padding:2em;'>");
+				var d = $("<div style='text-align:center;height:100%;width:98%;margin:0 auto;overflow:auto'>");
+				d.appendTo(w);
+				w.appendTo("body");
+				d.append("<br><br><h1>"+title+"</h1><b><a href=# id=close style='color:red'>&times; Close</a></b><br>");
+				d.append(img);
+				$("#close").click(()=>{
+					w.remove();
+				});
+			}
 		</script>
 	</body>
 </html>
