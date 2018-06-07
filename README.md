@@ -1,11 +1,9 @@
 
 # Fretted
 
-Create fretboard diagrams for scales and chords of any fretted instrument.
+Create fretboard diagrams for scales and chords of any fretted instrument. [**DEMO HERE.**](https://pamblam.github.io/Fretted/)
 
 ### Usage
-
-TLDR? [**Code samples here.**](https://pamblam.github.io/Fretted/)
 
 All methods start with your instrument. The two that are included out of the box are `Guitar` and `Ukulele`.
 
@@ -42,10 +40,18 @@ To make a chord diagram, you need to create an array of `String` instances and p
     Fretboard.Guitar()
       .makeChord([string1, string2, string3, string4, string5, string6]);
 
-To make a scale chart you need to first create an instance of a `Scale` and then pass it to the `makeScale` method. The `setNote` and `setRootNote` must be called.
+To make a scale chart you need to first create an instance of a `Scale` and then pass it to the `makeScale` method. The `setNotes` and `setRootNote` must be called, others are optional.
 
     var c_maj_scale = new Fretted.Scale()
       .setNotes(['C','D','E','F','G','A','B']) // notes of the scale
-      .setRootNote("C") // set the first noe in the scal
-      .setNoteStyle(green)
-      .setRootNoteStyle(blue, yellow);
+      .setRootNote("C") // set the first note in the scale
+      .setNoteStyle(green) // set the bg & text color of notes
+      .setRootNoteStyle(blue, yellow); // set bg & text color of root notes
+
+### Use Case
+
+I'm too lazy to memorize all this shit and I can't find any complete chart sets that has all the stuff I want, so I'm making them myself.
+
+### License
+
+See  [wtfpl.net](http://www.wtfpl.net/)  or the included LICENSE file.
