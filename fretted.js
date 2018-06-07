@@ -1,5 +1,5 @@
 
-const Fretboard = (function(){
+const Fretted = (function(){
 	
 	class FB{
 		constructor(options){
