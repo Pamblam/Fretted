@@ -311,6 +311,7 @@ const Fretted = (function(){
 					this.fretboard.markNote(strings[i].note||undefined, strings[i].fret, i+1, strings[i].bgColor||"#FF0000", strings[i].textColor||"#FF0000");
 				}
 			}
+			if(lfret === 0) lfret = 1;
 			while((hfret-lfret)+1<4&&lfret>1)lfret--;
 			while((hfret-lfret)+1<4)hfret++;
 			this.range=[lfret, hfret];
